@@ -31,6 +31,9 @@ setup(
     tests_require=[
         'pytz'
     ],
+    extras_require={
+        'gis': ['geoalchemy2'],
+    },
     entry_points={
         'sqlalchemy.dialects': [
             'bigquery = pybigquery.sqlalchemy_bigquery:BigQueryDialect'

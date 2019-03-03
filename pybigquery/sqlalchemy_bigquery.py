@@ -10,6 +10,11 @@ from google.cloud.bigquery.table import EncryptionConfiguration
 from google.cloud.bigquery.dataset import DatasetReference
 from google.oauth2 import service_account
 from google.api_core.exceptions import NotFound
+try:
+    from geoalchemy2.types import Geometry, Geography
+    has_geoalchemy = True
+except ImportError:
+    has_geoalchemy = False
 from sqlalchemy.exc import NoSuchTableError
 from sqlalchemy import types, util
 from sqlalchemy.sql.compiler import SQLCompiler, GenericTypeCompiler, DDLCompiler, IdentifierPreparer
@@ -103,6 +108,12 @@ _type_map = {
     'RECORD': types.JSON,
     'NUMERIC': types.DECIMAL,
 }
+
+if has_geoalchemy:
+    _type_map.update({
+        'GEOMETRY': Geometry,
+        'GEOGRAPHY': Geography,
+    })
 
 
 class BigQueryExecutionContext(DefaultExecutionContext):
